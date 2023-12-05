@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RegisterRequest;
+use App\Models\SensitivePassword;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class RegisterController extends Controller
 {
@@ -13,19 +15,24 @@ class RegisterController extends Controller
     {
         return view('register');
     }
-    public function store(Request $request)
+    public function store(RegisterRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:250',
-            'email'=>'required|email|unique:users',
-            'password'=>'required|min:8|confirmed'
-        ]);
+        $sensitivePasswords = SensitivePassword::pluck('sensitive_password')->toArray();
+        $inputPassword = $request->password;
+
+        foreach ($sensitivePasswords as $password) {
+            if (Str::startsWith($inputPassword, $password)) {
+                return redirect()->route('register')
+                    ->withErrors(['password' => 'Mật khẩu bạn nhập vào chứa thông tin nhạy cảm và không được chấp nhận. Vui lòng chọn một mật khẩu khác.']);
+            }
+        }
         User::create([
-            'name'=>$request->name,
-            'email'=>$request->email,
+            'display_name'=>$request->display_name,
+            'username'=>$request->username,
             'password'=>Hash::make($request->password)
         ]);
         return redirect()->route('login')
             ->withSuccess('You have successfully registered');
     }
 }
+

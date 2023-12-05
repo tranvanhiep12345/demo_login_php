@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LoginRequest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
@@ -19,13 +19,9 @@ class LoginController extends Controller
     {
         return view('login');
     }
-    public function authenticate(Request $request)
+    public function authenticate(LoginRequest $request)
     {
-        $request->validate([
-            'email'=>'required|email',
-            'password'=>'required'
-        ]);
-        $credentials = $request->only('email', 'password');
+        $credentials = $request->only('username', 'password');
         if(Auth::attempt($credentials))
         {
             $request->session()->regenerate();
@@ -33,8 +29,8 @@ class LoginController extends Controller
                 ->withSuccess('Logged in!');
         }
         return back()->withErrors([
-            'email' => 'Email does not exsist',
-        ])->onlyInput('email');
+            'username' => 'Username does not exsist',
+        ])->onlyInput('username');
     }
     public function dashboard()
     {
@@ -45,8 +41,8 @@ class LoginController extends Controller
 
         return redirect()->route('login')
             ->withErrors([
-                'email' => 'Please login to access',
-            ])->onlyInput('email');
+                'username' => 'Please login to access',
+            ])->onlyInput('username');
     }
     public function logout(Request $request)
     {

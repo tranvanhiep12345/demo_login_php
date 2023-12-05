@@ -11,20 +11,20 @@
                     <form action="{{ route('store') }}" method="post">
                         @csrf
                         <div class="mb-3 row">
-                            <label for="name" class="col-md-4 col-form-label text-md-end text-start">Name</label>
+                            <label for="display_name" class="col-md-4 col-form-label text-md-end text-start">Name</label>
                             <div class="col-md-6">
-                                <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('username') }}">
-                                @if ($errors->has('name'))
-                                    <span class="text-danger">{{ $errors->first('name') }}</span>
+                                <input type="text" class="form-control @error('display_name') is-invalid @enderror" id="display_name" name="display_name" value="{{ old('display_name') }}">
+                                @if ($errors->has('display_name'))
+                                    <span class="text-danger">{{ $errors->first('display_name') }}</span>
                                 @endif
                             </div>
                         </div>
                         <div class="mb-3 row">
-                            <label for="email" class="col-md-4 col-form-label text-md-end text-start">Email Address</label>
+                            <label for="username" class="col-md-4 col-form-label text-md-end text-start">Username</label>
                             <div class="col-md-6">
-                                <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}">
-                                @if ($errors->has('email'))
-                                    <span class="text-danger">{{ $errors->first('email') }}</span>
+                                <input class="form-control @error('username') is-invalid @enderror" id="username" name="username" value="{{ old('username') }}">
+                                @if ($errors->has('username'))
+                                    <span class="text-danger">{{ $errors->first('username') }}</span>
                                 @endif
                             </div>
                         </div>
