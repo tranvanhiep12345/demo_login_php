@@ -34,9 +34,14 @@ class RegisterRequest extends FormRequest
             'password'=>[
                 'required',
                 'string',
-                'min:8',
                 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/',
                 'confirmed',
+            ],
+            'email' => [
+                'required',
+                'string',
+                'regex:/^(?![0-9])([a-zA-Z0-9_.-]+)@([a-zA-Z0-9_-]+)\.([a-zA-Z]{2,5})$/',
+                'unique:users'
             ]
         ];
     }
@@ -50,9 +55,11 @@ class RegisterRequest extends FormRequest
             'username.unique' => 'Tên người dùng đã tồn tại.',
             'username.regex' => 'Tên người dùng chỉ được chứa chữ cái, số, dấu chấm và dấu gạch dưới và phải bắt đầu bằng một chữ cái.',
             'password.required' => 'Vui lòng nhập mật khẩu.',
-            'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự.',
             'password.regex' => 'Mật khẩu phải chứa ít nhất một chữ hoa, một chữ thường, một số và một ký tự đặc biệt.',
             'password.confirmed' => 'Mật khẩu xác nhận không khớp.',
+            'email.required' => 'Vui lòng nhập email.',
+            'email.regex' => 'Email bắt buộc phải có @ và không bắt đầu bằng một chữ số.',
+            'email.unique' => 'Email này đã được sử dụng, vui lòng chọn email khác.'
         ];
     }
 }

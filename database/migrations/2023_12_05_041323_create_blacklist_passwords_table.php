@@ -13,9 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('sensitive_passwords', function (Blueprint $table) {
+        Schema::create('blacklist_passwords', function (Blueprint $table) {
             $table->id();
-            $table->string('sensitive_password')->unique();
+            $table->string('blacklist_password')->unique();
             $table->timestamps();
         });
     }
@@ -27,7 +27,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sensitive_passwords');
+        Schema::dropIfExists('blacklist_passwords');
     }
 };
 
