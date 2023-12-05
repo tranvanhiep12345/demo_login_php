@@ -10,3 +10,6 @@ class SensitivePassword extends Model
     protected $table = 'sensitive_passwords';
     protected $fillable = ['sensitive_password'];
 }
+//App\Models\SensitivePassword::create([
+//    'sensitive_password' => 'abc123@',
+// ]);

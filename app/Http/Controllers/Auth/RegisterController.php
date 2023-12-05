@@ -22,7 +22,7 @@ class RegisterController extends Controller
 
         foreach ($sensitivePasswords as $password) {
             if (Str::startsWith($inputPassword, $password)) {
-                return redirect()->route('register')
+                return redirect()->back()
                     ->withErrors(['password' => 'Mật khẩu bạn nhập vào chứa thông tin nhạy cảm và không được chấp nhận. Vui lòng chọn một mật khẩu khác.']);
             }
         }
@@ -32,7 +32,7 @@ class RegisterController extends Controller
             'password'=>Hash::make($request->password)
         ]);
         return redirect()->route('login')
-            ->withSuccess('You have successfully registered');
+            ->withSuccess('Đăng kí thành công !!!');
     }
 }
 

@@ -26,10 +26,10 @@ class LoginController extends Controller
         {
             $request->session()->regenerate();
             return redirect()->route('dashboard')
-                ->withSuccess('Logged in!');
+                ->withSuccess('Đăng nhập thành công !!!');
         }
         return back()->withErrors([
-            'username' => 'Username does not exsist',
+            'username' => 'Tài khoản hoặc mật khẩu không đúng',
         ])->onlyInput('username');
     }
     public function dashboard()
@@ -41,7 +41,7 @@ class LoginController extends Controller
 
         return redirect()->route('login')
             ->withErrors([
-                'username' => 'Please login to access',
+                'username' => 'Vui lòng đăng nhập',
             ])->onlyInput('username');
     }
     public function logout(Request $request)
@@ -50,6 +50,6 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect()->route('login')
-            ->withSuccess('You have logged out ');
+            ->withSuccess('Đăng xuất thành công !!! ');
     }
 }
