@@ -10,7 +10,9 @@
 <body>
     <nav class="navbar navbar-expand-lg bg-light">
         <div class="container">
-            <a class="navbar-brand" href="{{ URL('/dashboard') }}">Demo</a>
+            <h1>
+                <a class="navbar-brand" href="{{ URL('/dashboard') }}">Demo phân quyền</a>
+            </h1>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -29,6 +31,15 @@
                                 {{ Auth::user()->display_name }}
                             </a>
                             <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('home') }}">
+                                        List Permission
+                                    </a>
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('role') }}">
+                                        List Role
+                                    </a>
+                                </li>
                                 <li>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                             onclick="event.preventDefault();

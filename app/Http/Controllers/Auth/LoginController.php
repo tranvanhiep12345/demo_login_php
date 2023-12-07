@@ -12,12 +12,12 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except([
-            'logout', 'dashboard'
+            'logout', 'dashboard','home','role'
         ]);
     }
     public function login()
     {
-        return view('login');
+        return view('auth.login');
     }
     public function authenticate(LoginRequest $request)
     {

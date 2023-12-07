@@ -13,12 +13,11 @@ class RegisterController extends Controller
 {
     public function register()
     {
-        return view('register');
+        return view('auth.register');
     }
     public function store(RegisterRequest $request)
     {
         $blacklistPasswords = BlacklistPassword::pluck('blacklist_password')->toArray();
-
         if (in_array($request->password, $blacklistPasswords)) {
             return redirect()->back()
                 ->withErrors(['password' => 'Mật khẩu bạn nhập vào chứa thông tin nhạy cảm và không được chấp nhận. Vui lòng chọn một mật khẩu khác.']);

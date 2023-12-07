@@ -35,7 +35,7 @@ class RegisterRequest extends FormRequest
                 'required',
                 'string',
                 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/',
-                'confirmed',
+                'confirmed'
             ],
             'email' => [
                 'required',
@@ -62,4 +62,5 @@ class RegisterRequest extends FormRequest
             'email.unique' => 'Email này đã được sử dụng, vui lòng chọn email khác.'
         ];
     }
+
 }
