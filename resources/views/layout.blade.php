@@ -10,7 +10,7 @@
 <body>
     <nav class="navbar navbar-expand-lg bg-light">
         <div class="container">
-            <h1>
+            <h1 style="display: flex; align-content: center">
                 <a class="navbar-brand" href="{{ URL('/dashboard') }}">Demo phân quyền</a>
             </h1>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,10 +20,10 @@
                 <ul class="navbar-nav ms-auto">
                     @guest
                         <li class="nav-item">
-                            <a class="nav-link {{ (request()->is('login')) ? 'active' : '' }}" href="{{ route('login') }}">Login</a>
+                            <a class="nav-link {{ (request()->is('login')) ? 'active' : '' }}" href="{{ route('login') }}">Đăng nhập</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {{ (request()->is('register')) ? 'active' : '' }}" href="{{ route('register') }}">Register</a>
+                            <a class="nav-link {{ (request()->is('register')) ? 'active' : '' }}" href="{{ route('register') }}">Đăng kí</a>
                         </li>
                     @else
                         <li class="nav-item dropdown">
@@ -33,11 +33,12 @@
                             <ul class="dropdown-menu">
                                 <li>
                                     <a class="dropdown-item" href="{{ route('home') }}">
-                                        List Permission
+                                        Danh sách Permission
                                     </a>
+                                </li>
                                 <li>
                                     <a class="dropdown-item" href="{{ route('role') }}">
-                                        List Role
+                                        Danh sách Role
                                     </a>
                                 </li>
                                 <li>

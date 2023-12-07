@@ -6,12 +6,12 @@
         <div class="col-md-8">
 
             <div class="card">
-                <div class="card-header">Register</div>
+                <div class="card-header">Đăng kí</div>
                 <div class="card-body">
                     <form action="{{ route('store') }}" method="post">
                         @csrf
                         <div class="mb-3 row">
-                            <label for="display_name" class="col-md-4 col-form-label text-md-end text-start">Name</label>
+                            <label for="display_name" class="col-md-4 col-form-label text-md-end text-start">Tên hiển thị</label>
                             <div class="col-md-6">
                                 <input type="text" class="form-control @error('display_name') is-invalid @enderror" id="display_name" name="display_name" value="{{ old('display_name') }}">
                                 @if ($errors->has('display_name'))
@@ -20,7 +20,7 @@
                             </div>
                         </div>
                         <div class="mb-3 row">
-                            <label for="username" class="col-md-4 col-form-label text-md-end text-start">Username</label>
+                            <label for="username" class="col-md-4 col-form-label text-md-end text-start">Tên đăng nhập</label>
                             <div class="col-md-6">
                                 <input class="form-control @error('username') is-invalid @enderror" id="username" name="username" value="{{ old('username') }}">
                                 @if ($errors->has('username'))
@@ -29,7 +29,7 @@
                             </div>
                         </div>
                         <div class="mb-3 row">
-                            <label for="email" class="col-md-4 col-form-label text-md-end text-start">Email Address</label>
+                            <label for="email" class="col-md-4 col-form-label text-md-end text-start">Địa chỉ email</label>
                             <div class="col-md-6">
                                 <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}">
                                 @if ($errors->has('email'))
@@ -38,7 +38,7 @@
                             </div>
                         </div>
                         <div class="mb-3 row">
-                            <label for="password" class="col-md-4 col-form-label text-md-end text-start">Password</label>
+                            <label for="password" class="col-md-4 col-form-label text-md-end text-start">Mật khẩu</label>
                             <div class="col-md-6">
                                 <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password">
                                 @if ($errors->has('password'))
@@ -47,7 +47,7 @@
                             </div>
                         </div>
                         <div class="mb-3 row">
-                            <label for="password_confirmation" class="col-md-4 col-form-label text-md-end text-start">Confirm Password</label>
+                            <label for="password_confirmation" class="col-md-4 col-form-label text-md-end text-start">Nhập lại mât khẩu</label>
                             <div class="col-md-6">
                                 <input type="password" class="form-control" id="password_confirmation" name="password_confirmation">
                             </div>
