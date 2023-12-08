@@ -12,7 +12,7 @@ class PermissionController extends Controller
         if(Auth::check())
         {
             $permission = Permission::with('roles')->get();
-            return view('admin.permission', compact('permission'));
+            return view('admin.home', compact('permission'));
         }
         return redirect()->route('login')
             ->withErrors([
