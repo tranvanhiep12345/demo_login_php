@@ -3,53 +3,47 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\LoginRequest;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Repository\Eloquent\UserRepository;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class LoginController extends Controller
 {
-    public function __construct()
+    public function __construct(UserRepository $userRepository)
     {
-        $this->middleware('guest')->except([
-            'logout', 'dashboard','home','role'
-        ]);
+        $this->middleware('auth:api',['except' => [
+            'login'
+        ]]);
+        $this->userRepository = $userRepository;
     }
-    public function login()
-    {
-        return view('auth.login');
-    }
-    public function authenticate(LoginRequest $request)
+    public function login(LoginRequest $request)
     {
         $credentials = $request->only('username', 'password');
-        if(Auth::attempt($credentials))
-        {
-            $request->session()->regenerate();
-            return redirect()->route('dashboard')
-                ->withSuccess('Đăng nhập thành công !!!');
+        if (!$token = auth('api')->attempt($credentials)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
         }
-        return back()->withErrors([
-            'username' => 'Tài khoản hoặc mật khẩu không đúng',
-        ])->onlyInput('username');
+        return $this->respondWithToken($token);
     }
-    public function dashboard()
+    public function logout()
     {
-        if(Auth::check())
-        {
-            return view('dashboard');
-        }
-
-        return redirect()->route('login')
-            ->withErrors([
-                'username' => 'Vui lòng đăng nhập',
-            ])->onlyInput('username');
+        auth()->logout();
+        return response()->json(['message' => 'Đăng xuất thành công !!! ']);
     }
-    public function logout(Request $request)
+    public function changePassword(ChangePasswordRequest $passwordData)
     {
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-        return redirect()->route('login')
-            ->withSuccess('Đăng xuất thành công !!! ');
+        $this->userRepository->changePassword($passwordData);
+        $user = auth('api')->user();
+        $token = JWTAuth::fromUser($user);
+        auth('api')->logout();
+        return $this->respondWithToken($token);
+    }
+    protected function respondWithToken($token)
+    {
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth('api')->factory()->getTTL() * 60
+        ]);
     }
 }

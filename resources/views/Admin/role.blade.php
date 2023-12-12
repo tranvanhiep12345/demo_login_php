@@ -17,9 +17,9 @@
                         <thead class="bg-white text-uppercase">
                         <tr class="ligth ligth-data">
                             <th>ID</th>
-                            <th>Tên vai trò</th>
+                            <th>Role</th>
                             <th>Mô tả</th>
-                            <th>Tên người dùng</th>
+                            <th>Name</th>
                         </tr>
                         </thead>
                         <tbody class="ligth-body">

@@ -2,21 +2,30 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Controller;
-use App\Models\Permission;
-use Illuminate\Support\Facades\Auth;
+use App\Repository\Eloquent\PermissionRepository;
 
 class PermissionController extends Controller
 {
-    public function index(){
-        if(Auth::check())
-        {
-            $permission = Permission::with('roles')->get();
-            return view('admin.home', compact('permission'));
+    public function __construct(PermissionRepository $permissionRepository,
+                                RoleController $roleController)
+    {
+        $this->permissionRepository = $permissionRepository;
+
+        $this->roleController = $roleController;
+    }
+    public function index()
+    {
+        return $this->permissionRepository->all();
+    }
+    public function findByUserId()
+    {
+        $user = auth('api')->user();
+        if (!$user) {
+            return response()->json(['error' => 'Unauthenticated'], 401);
         }
-        return redirect()->route('login')
-            ->withErrors([
-                'username' => 'Vui lòng đăng nhập',
-            ])->onlyInput('username');
+        $idUser = $user->id;
+        return $this->permissionRepository->findByUserId($idUser);
     }
 }
