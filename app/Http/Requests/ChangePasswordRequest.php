@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Repository\Eloquent\BlacklistPasswordRepository;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ChangePasswordRequest extends FormRequest
 {
@@ -14,6 +16,10 @@ class ChangePasswordRequest extends FormRequest
     public function authorize()
     {
         return true;
+    }
+    public function __construct(BlacklistPasswordRepository $blacklistPasswordRepository)
+    {
+        $this->blacklistPasswordRepository = $blacklistPasswordRepository;
     }
 
     /**
@@ -33,7 +39,8 @@ class ChangePasswordRequest extends FormRequest
                 'required',
                 'string',
                 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/',
-                'confirmed'
+                'confirmed',
+                Rule::notIn($this->getBlacklistPasswords())
             ]
         ];
     }
@@ -44,7 +51,12 @@ class ChangePasswordRequest extends FormRequest
             'old_password.regex' => 'Mật khẩu phải chứa ít nhất một chữ hoa, một chữ thường, một số và một ký tự đặc biệt.',
             'password.required' => 'Vui lòng nhập mật khẩu  mới.',
             'password.regex' => 'Mật khẩu mới phải chứa ít nhất một chữ hoa, một chữ thường, một số và một ký tự đặc biệt.',
-            'password.confirmed' => 'Mật khẩu xác nhận không khớp.'
+            'password.confirmed' => 'Mật khẩu xác nhận không khớp.',
+            'password.not_in' => 'Mật khẩu mới bạn nhập vào chứa thông tin nhạy cảm và không được chấp nhận. Vui lòng chọn một mật khẩu khác.'
         ];
+    }
+    public function getBlacklistPasswords()
+    {
+        return $this->blacklistPasswordRepository->all();
     }
 }

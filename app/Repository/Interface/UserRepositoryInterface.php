@@ -1,6 +1,7 @@
 <?php
 namespace App\Repository\Interface;
 
+use App\Http\Requests\ChangePasswordRequest;
 use Illuminate\Support\Collection;
 
 interface UserRepositoryInterface

@@ -12,7 +12,7 @@ class LoginController extends Controller
 {
     public function __construct(UserRepository $userRepository)
     {
-        $this->middleware('auth:api',['except' => [
+        $this->middleware('auth:api', ['except' => [
             'login'
         ]]);
         $this->userRepository = $userRepository;
@@ -25,19 +25,24 @@ class LoginController extends Controller
         }
         return $this->respondWithToken($token);
     }
+
     public function logout()
     {
         auth()->logout();
         return response()->json(['message' => 'Đăng xuất thành công !!! ']);
     }
+
     public function changePassword(ChangePasswordRequest $passwordData)
     {
-        $this->userRepository->changePassword($passwordData);
+        if (!$this->userRepository->changePassword($passwordData)) {
+            return response()->json(['error' => 'Mật khẩu cũ không chính xác.'], 422);
+        }
         $user = auth('api')->user();
         $token = JWTAuth::fromUser($user);
         auth('api')->logout();
         return $this->respondWithToken($token);
     }
+
     protected function respondWithToken($token)
     {
         return response()->json([

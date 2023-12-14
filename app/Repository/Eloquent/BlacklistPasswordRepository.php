@@ -3,7 +3,6 @@ namespace App\Repository\Eloquent;
 
 use App\Models\BlacklistPassword;
 use App\Repository\Interface\BlacklistPasswordRepositoryInterface;
-use Illuminate\Support\Collection;
 
 class BlacklistPasswordRepository implements BlacklistPasswordRepositoryInterface
 {
@@ -11,8 +10,8 @@ class BlacklistPasswordRepository implements BlacklistPasswordRepositoryInterfac
     {
         $this->blacklistPassword = $blacklistPassword;
     }
-    public function all(): Collection
+    public function all()
     {
-        return $this->blacklistPassword->all();
+        return $this->blacklistPassword->pluck('blacklist_password')->toArray();
     }
 }
