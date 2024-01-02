@@ -5,8 +5,11 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Models\User;
 use App\Repository\Eloquent\BlacklistPasswordRepository;
 use App\Repository\Eloquent\UserRepository;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
 
 class RegisterController extends Controller
 {
@@ -16,10 +19,7 @@ class RegisterController extends Controller
     }
     public function register(RegisterRequest $request)
     {
-        if(!$this->userRepository->create($request)){
-            return response()->json(['password' => 'Mật khẩu bạn nhập vào chứa thông tin nhạy cảm và không được chấp nhận. Vui lòng chọn một mật khẩu khác.'],422);
-        }
+        $this->userRepository->create($request);
         return response()->json(["message" => "Đăng kí thành công !!!"]);
     }
 }
-

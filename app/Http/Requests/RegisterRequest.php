@@ -17,10 +17,6 @@ class RegisterRequest extends FormRequest
     {
         return true;
     }
-    public function __construct(BlacklistPasswordRepository $blacklistPasswordRepository)
-    {
-        $this->blacklistPasswordRepository = $blacklistPasswordRepository;
-    }
 
     /**
      * Get the validation rules that apply to the request.
@@ -30,7 +26,11 @@ class RegisterRequest extends FormRequest
     public function rules()
     {
         return [
-            'display_name' => 'required|string|max:250',
+            'display_name' => [
+                'required,
+                string,
+                max:250'
+            ],
             'username'=>[
                 'required',
                 'min:6',
@@ -42,7 +42,7 @@ class RegisterRequest extends FormRequest
                 'string',
                 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/',
                 'confirmed',
-                Rule::notIn($this->getBlacklistPasswords())
+                'unique:blacklist_passwords,blacklist_password'
             ],
             'email' => [
                 'required',
@@ -64,14 +64,10 @@ class RegisterRequest extends FormRequest
             'password.required' => 'Vui lòng nhập mật khẩu.',
             'password.regex' => 'Mật khẩu phải chứa ít nhất một chữ hoa, một chữ thường, một số và một ký tự đặc biệt.',
             'password.confirmed' => 'Mật khẩu xác nhận không khớp.',
-            'password.not_in' => 'Mật khẩu mới bạn nhập vào chứa thông tin nhạy cảm và không được chấp nhận. Vui lòng chọn một mật khẩu khác.',
+            'password.unique' => 'Mật khẩu mới bạn nhập vào chứa thông tin nhạy cảm và không được chấp nhận. Vui lòng chọn một mật khẩu khác.',
             'email.required' => 'Vui lòng nhập email.',
             'email.regex' => 'Email bắt buộc phải có @ và không bắt đầu bằng một chữ số.',
             'email.unique' => 'Email này đã được sử dụng, vui lòng chọn email khác.'
         ];
-    }
-    public function getBlacklistPasswords()
-    {
-        return $this->blacklistPasswordRepository->all();
     }
 }

@@ -23,7 +23,7 @@ Route::controller(LoginController::class)->group(function() {
     Route::post('/login', 'login')->name('login');
 });
 
-Route::group(['middleware' => 'auth:api'], function () {
+Route::group(['middleware' => ['auth:api', 'check.jwt_version']], function () {
     Route::put('/change-password', [LoginController::class, 'changePassword']);
     Route::post('/logout', [LoginController::class, 'logout']);
     Route::get('/homes', [PermissionController::class, 'findByUserId'])->name('home');

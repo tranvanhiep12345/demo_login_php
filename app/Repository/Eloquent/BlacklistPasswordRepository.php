@@ -3,6 +3,7 @@ namespace App\Repository\Eloquent;
 
 use App\Models\BlacklistPassword;
 use App\Repository\Interface\BlacklistPasswordRepositoryInterface;
+use Illuminate\Support\Facades\Cache;
 
 class BlacklistPasswordRepository implements BlacklistPasswordRepositoryInterface
 {
@@ -12,6 +13,9 @@ class BlacklistPasswordRepository implements BlacklistPasswordRepositoryInterfac
     }
     public function all()
     {
-        return $this->blacklistPassword->pluck('blacklist_password')->toArray();
+        $cacheKey = 'blacklist_passwords';
+        return Cache::remember($cacheKey, 600, function () {
+            return $this->blacklistPassword->pluck('blacklist_password')->toArray();
+        });
     }
 }

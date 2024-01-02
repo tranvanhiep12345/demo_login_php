@@ -15,17 +15,12 @@ class PermissionController extends Controller
 
         $this->roleController = $roleController;
     }
-    public function index()
-    {
-        return $this->permissionRepository->all();
-    }
     public function findByUserId()
     {
         $user = auth('api')->user();
         if (!$user) {
             return response()->json(['error' => 'Unauthenticated'], 401);
         }
-        $idUser = $user->id;
-        return $this->permissionRepository->findByUserId($idUser);
+        return $this->permissionRepository->findByUserId($user->id);
     }
 }

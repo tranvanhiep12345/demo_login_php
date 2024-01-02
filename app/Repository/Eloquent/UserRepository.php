@@ -1,33 +1,30 @@
 <?php
+
 namespace App\Repository\Eloquent;
 
-use App\Http\Requests\ChangePasswordRequest;
 use App\Models\User;
 use App\Repository\Interface\UserRepositoryInterface;
-use Illuminate\Support\Collection;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 
 class UserRepository implements UserRepositoryInterface
 {
-    public function __construct(User $user,
-                                BlacklistPasswordRepository $blacklistPassword)
+    public function __construct(User $user)
     {
         $this->user = $user;
-        $this->blacklistPassword = $blacklistPassword;
-    }
-    public function all(): Collection
-    {
-        return $this->user->all();
     }
 
-    public function find($username)
+    public function cacheUserData($username)
     {
-        return $this->user->find($username);
+        $cacheKey = 'user.' . $username;
+        return Cache::remember($cacheKey, 600, function () use ($username) {
+            return $this->user->where('username', $username)->first();
+        });
     }
 
     public function create($userData)
     {
-
         return $this->user->create([
             'display_name' => $userData->display_name,
             'username' => $userData->username,
@@ -42,8 +39,36 @@ class UserRepository implements UserRepositoryInterface
         if (!Hash::check($passwordData->old_password, $user->password)) {
             return false;
         }
-        return $user->update([
-            'password' => Hash::make($passwordData->password)
+
+        $user->update([
+            'password' => Hash::make($passwordData->password),
+            'password_changed_at' => Carbon::now(),
+            'jwt_version' => $user->jwt_version + 1,
         ]);
+        $user->save();
+        $this->clearUserCache($user->username);
+
+        $cachedVersion = $this->user->find($user->id);
+        Cache::put('jwt_version:' . $user->id, $cachedVersion->jwt_version, 600);
+
+        return auth('api')->claims([
+            'jwt_version' => $user->jwt_version
+        ])->fromUser($user);
+    }
+
+    public function checkUserBlock($username)
+    {
+        $cacheKey = 'user.blocked.' . $username;
+
+        return Cache::remember($cacheKey, 600, function () use ($username) {
+            $user = $this->user->where('username', $username)->first();
+            return $user['is_blocked'];
+        });
+    }
+
+    public function clearUserCache($username)
+    {
+        Cache::forget('user.' . $username);
+        Cache::forget('user.blocked.' . $username);
     }
 }

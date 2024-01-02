@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Controller;
 use App\Repository\Eloquent\RoleRepository;
-
 class RoleController extends Controller
 {
     public function __construct(RoleRepository $roleRepository)
